@@ -1,0 +1,111 @@
+# ============================================================
+#  ExoticEnchants configuration   (/exotic admin reload)
+# ============================================================
+
+rolls:
+  interval-minutes: 60        # time between hourly rolls
+  normal-chance: 0.65         # 65% Normal Hourly Enchantment, the rest is a Great Reroll
+  announce: true              # broadcast each reward to the server
+
+great-reroll:
+  # Chance that a Great Reroll tries to TAKE an exotic owned by another player.
+  # Only exotics on the SAME item type as the roller's main-hand item can be taken.
+  steal-bias: 0.7
+  allow-steal-from-offline: false   # offline owners are never targeted when false
+  protection-hours: 3               # a new owner cannot be stolen from for this long
+  max-steals-per-round: 3
+
+afk:
+  minutes: 10                 # no real movement for this long = AFK (no roll)
+  ignore-passive-movement: true  # riding vehicles does not count as moving
+
+exotics:
+  # NON_VANILLA_ONLY = only enchants that normally cannot be on that item
+  #                    (wrong item type, or conflicting with an enchant already on it)
+  # ANY              = every vanilla enchant counts as exotic
+  pool-mode: NON_VANILLA_ONLY
+  # Exact material names, or suffixes starting with "_".
+  eligible-items:
+    - _SWORD
+    - _AXE
+    - _PICKAXE
+    - _SHOVEL
+    - _HOE
+    - _HELMET
+    - _CHESTPLATE
+    - _LEGGINGS
+    - _BOOTS
+    - BOW
+    - CROSSBOW
+    - TRIDENT
+    - MACE
+    - FISHING_ROD
+    - SHIELD
+    - ELYTRA
+    - SHEARS
+  protect-dropped-items: true      # exotic item entities are invulnerable and never despawn
+  scan-interval-seconds: 3         # how often online players' inventories are validated
+
+# Relative weights of the five rarity tiers (20 each = 20% each).
+rarity-weights:
+  common: 20
+  uncommon: 20
+  rare: 20
+  epic: 20
+  legendary: 20
+
+shop:
+  enabled: true
+  rotation-hours: 4          # stock rotates; unsold stock disappears
+  slots: 9                   # books on sale (max 27)
+  stock-per-entry: 2         # global shared stock per book
+  prices:                    # needs Vault + an economy plugin
+    common: 500
+    uncommon: 1500
+    rare: 5000
+    epic: 15000
+    legendary: 50000
+
+# Cost to remove an exotic enchantment (/exotic remove confirm), by rarity.
+removal-cost:
+  common: 250
+  uncommon: 750
+  rare: 2500
+  epic: 7500
+  legendary: 25000
+
+# ------------------------------------------------------------------------------------------
+# Custom effects for exotic enchantments on unusual items. Vanilla only activates an enchantment on
+# the item types it was designed for, so "Frost Walker on a sword" or "Density on a bow" would
+# otherwise do nothing. The plugin implements the combinations below itself; every other
+# combination that would do nothing is never rolled, sold or applied.
+# A full per-enchantment table is generated on every start: plugins/ExoticEnchants/effects-audit.txt
+# ------------------------------------------------------------------------------------------
+exotic-effects:
+  # true  = only offer enchantment/item combinations that actually work (recommended)
+  # false = old behaviour: any combination may be rolled, even if it does nothing
+  require-working-effect: true
+
+  # Frost Walker on a sword/axe/bow/... : water around you freezes while it is held (like boots).
+  frost-walker-on-held-items:
+    enabled: true
+    max-radius: 6
+    melt-seconds: 6
+
+  # Protection, Fire/Blast/Projectile Protection and Feather Falling on non-armor items reduce damage
+  # while held in the main hand or off hand (4% per protection point, vanilla formula).
+  protection-on-held-items:
+    enabled: true
+    max-reduction: 0.8      # never more than 80%, like vanilla
+
+  # Sharpness, Smite, Bane of Arthropods and Fire Aspect on a bow/crossbow apply to its arrows.
+  bow-weapon-enchants:
+    enabled: true
+
+  # Density on a bow/crossbow: arrows shot while falling deal bonus damage, like a mace smash.
+  # bonus = level x damage-per-block-per-level x blocks fallen (nothing under min-fall-distance, capped).
+  density-bow:
+    enabled: true
+    damage-per-block-per-level: 0.25
+    min-fall-distance: 1.5
+    max-bonus-damage: 20.0

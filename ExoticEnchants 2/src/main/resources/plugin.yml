@@ -1,0 +1,22 @@
+name: ExoticEnchants
+version: '${version}'
+main: com.exoticenchants.ExoticEnchantsPlugin
+api-version: '1.21.11'
+description: Globally unique exotic enchantments with hourly rolls, steals, shop and registry.
+authors: [ExoticEnchants]
+softdepend: [Vault]
+libraries:
+  - org.xerial:sqlite-jdbc:3.46.1.0
+commands:
+  exotic:
+    description: Exotic enchantments.
+    usage: /exotic [top|inspect|apply|shop|remove|rolls|admin]
+    aliases: [exotics, ex]
+    permission: exoticenchants.use
+permissions:
+  exoticenchants.use:
+    description: Use the exotic commands.
+    default: true
+  exoticenchants.admin:
+    description: Administer exotic enchantments.
+    default: op
